@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/menu-selection.css">
+    <script src="JS/menu-selection.js" defer></script>
+    <title>Selection Menu</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="selectFoodMenu">
+            <div class="selectFood">
+                <div class="categorieSelection">
+                    <div class="categorieArrow categorieArrowLeft">&#9664;</div>
+                    <div id="categorieList">
+                        <!-- Les catégories seront générées ici par createCategories() -->
+                    </div>
+                    <div class="categorieArrow categorieArrowRight">&#9654;</div>
+                </div>
+            </div>
+            <div class="menu">
+                <div class="menuSelection">
+                    <div class="menuSelectionTitre">Nos menus</div>
+                    <div class="menuSelectionDescription">Un sandwich, une friture ou une salade et une boisson</div>
+                    <div id="foodList" class="menuSelectionProduits">
+                        <!-- Les produits seront générés ici par createFoodItems() -->
+                    </div>
+
+                    <div id="modal">
+                        <div id="modalContent">
+                            <button id="closeModal" class="modalCloseBtn">&times;</button>
+                            <div class="modalDescription">
+                                <h2>Une grosse faim ?</h2>
+                                <div class="modalSubtitle">
+                                    Le menu maxi Best Of comprend un sandwich, une grande frite et une boisson 50 cl
+                                </div>
+                                <div class="modalMenus">
+                                    <div class="modalMenuItem">
+                                        <img src="/Front/images/images/illustration-maxi-best-of.png" alt="Menu Maxi Best Of"
+                                            class="modalMenuImg">
+                                        <div class="modalMenuLabel">Menu Maxi Best Of</div>
+                                    </div>
+                                    <div class="modalMenuItem">
+                                        <img src="/Front/images/images/illustration-best-of.png" alt="Menu Best Of"
+                                            class="modalMenuImg">
+                                        <div class="modalMenuLabel">Menu Best Of</div>
+                                    </div>
+                                </div>
+                                <button class="modalButton">Etape Suivante</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panier">
+            <div class="panierLogo"><img src="/Front/images/images/logo.png" /></div>
+            <div class="panierContent">
+                <div class="panierNumbers">
+                    <div>
+                        <div>[Commande numéro]</div>
+                        <div>[Sur place :] <b>326</b></div>
+                    </div>
+                    <div class="panierNumbersNumber">72</div>
+                </div>
+                <div class="panierOrder">
+                    <div class="panierOrderItem">
+                        <div class="panierOrderTitle">1 menu Maxi Best Of Big Mac</div>
+                        <span class="panierTrash">&#128465;</span>
+                        <ul>
+                            <li>frite</li>
+                            <li>sprite</li>
+                            <li>ketchup</li>
+                            <li>sauce deluxe</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panierPay">
+                <div class="panierEnding">
+                    <div>
+                        <div>[TOTAL]</div>
+                        <div>(ttc)</div>
+                    </div>
+                    <div style="font-size:28px; font-weight:600;">36,50€</div>
+                </div>
+                <div class="panierEndingAbandonPay">
+                    <div class="panierEndingAbandon">[Abandon]</div>
+                    <div class="panierEndingPay">[Payer]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
