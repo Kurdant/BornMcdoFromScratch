@@ -74,9 +74,6 @@ body, html {
 .menuSelectionProduit:hover {
     cursor:pointer;
 }
-#closeModal:hover{
-    cursor: pointer;
-}
 
 .menuSelectionImg {
     height: 98px;
@@ -162,7 +159,8 @@ body, html {
 
 /* Container des produits */
 #foodList {
-    display: grid;
+  display: flex;
+  flex-wrap: wrap;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
   padding: 20px 0;
@@ -170,12 +168,15 @@ body, html {
 
 /* Carte produit */
 .foodItem {
+  max-width: 150px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease;
+  max-width: 200px;
+  min-width: 200px;
 }
 
 .foodItem:hover {
@@ -356,6 +357,10 @@ body, html {
 
 /* modal */
 
+#closeModal:hover{
+    cursor: pointer;
+}
+
 #modal {
   position: fixed;
   top: 0; 
@@ -441,4 +446,10 @@ body, html {
   color: #222;
 }
 
-
+/* Steps */
+.second-step{
+  display: none;
+}
+.third-step {
+  display: none;
+}

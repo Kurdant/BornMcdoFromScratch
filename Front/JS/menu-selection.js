@@ -1,21 +1,17 @@
-const produits = document.querySelectorAll('.menuSelectionProduit');
+const produits = document.querySelectorAll('.foodItem');
 const modal = document.getElementById('modal');
 const modalClose = document.getElementById('closeModal');
-const categorieList = document.getElementById('categorieList');
 
 /* Open - Close modal */
 function openModal() {
     modal.style.display = 'flex';
 }
-
-produits.forEach(produit => {
-  produit.addEventListener('click', openModal);
-});
-
 function closeModal() {
   modal.style.display = 'none';
+  document.querySelector('.first-step').style.display = 'block';
+  document.querySelector('.second-step').style.display = 'none';
+  document.querySelector('.third-step').style.display = 'none';
 }
-
 modalClose.addEventListener('click', closeModal);
 
 /* Select menu */
@@ -70,9 +66,9 @@ function displayFoodByCategory(categoryId) {
   });
 }
 
-function createFoodItems() {
+function createFoodItems(categoryId) {
   const foodContainer = document.getElementById('foodList');
-  const categories = ['sandwiches', 'wraps', 'frites', 'boissonsFroides', 'encas', 'desserts'];
+  const categories = ['menu', 'sandwiches', 'wraps', 'frites', 'boissonsFroides', 'encas', 'desserts'];
   
   categories.forEach(categoryKey => {
     jsonData[categoryKey].forEach(produit => {
@@ -86,8 +82,36 @@ function createFoodItems() {
         <p>${produit.description}</p>
         <span>${produit.prix}€</span>
       `;
-      
+      div.addEventListener('click', () => {
+        if(produit.categoryId === 1){
+          openModal()
+        } else
+        console.log("nono")
+      });
       foodContainer.appendChild(div);
     });
   });
 }
+
+document.querySelectorAll('.modalButton.step1').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelector('.first-step').style.display = 'none';
+    document.querySelector('.second-step').style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.modalButton.step2').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelector('.second-step').style.display = 'none';
+    document.querySelector('.third-step').style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.modalButton.step3').forEach(button => {
+  button.addEventListener('click', () => {
+    alert('Menu ajouté à votre commande !');
+    document.querySelector('.first-step').style.display = 'block';
+    document.querySelector('.third-step').style.display = 'none';
+    closeModal();
+  });
+}); 

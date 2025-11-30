@@ -1,6 +1,6 @@
 {
   "categories": [
-    { "id": 1, "nom": "Menus" },
+    { "id": 1, "nom": "Menu" },
     { "id": 2, "nom": "Sandwiches" },
     { "id": 3, "nom": "Wraps" },
     { "id": 4, "nom": "Frites" },
@@ -8,6 +8,21 @@
     { "id": 6, "nom": "Encas" },
     { "id": 7, "nom": "Desserts" }
   ],
+    "menu": [
+      { "id": 101, "categoryId": 1, "nom": "280", "prix": 4.50, "description": "Burger double steak", "image": "images/sandwiches/280.png" },
+      { "id": 102, "categoryId": 1, "nom": "Big Mac", "prix": 5.50, "description": "Double steak, sauce spéciale", "image": "images/sandwiches/BIGMAC.png" },
+      { "id": 103, "categoryId": 1, "nom": "Big Tasty", "prix": 6.50, "description": "Steak épais, sauce fumée", "image": "images/sandwiches/BIG_TASTY_1_VIANDE.png" },
+      { "id": 104, "categoryId": 1, "nom": "Big Tasty Bacon", "prix": 6.90, "description": "Big Tasty avec bacon croustillant", "image": "images/sandwiches/BIG_TASTY_BACON_1_VIANDE.png" },
+      { "id": 105, "categoryId": 1, "nom": "CBO", "prix": 5.80, "description": "Poulet, bacon, oignons", "image": "images/sandwiches/CBO.png" },
+      { "id": 106, "categoryId": 1, "nom": "McChicken", "prix": 5.20, "description": "Poulet pané, salade, mayo", "image": "images/sandwiches/MCCHICKEN.png" },
+      { "id": 107, "categoryId": 1, "nom": "McCrispy", "prix": 5.60, "description": "Poulet croustillant épicé", "image": "images/sandwiches/MCCRISPY.png" },
+      { "id": 108, "categoryId": 1, "nom": "McFish", "prix": 5.40, "description": "Poisson pané, sauce tartare", "image": "images/sandwiches/MCFISH.png" },
+      { "id": 109, "categoryId": 1, "nom": "Royal Bacon", "prix": 6.20, "description": "Steak, bacon, fromage", "image": "images/sandwiches/ROYALBACON.png" },
+      { "id": 110, "categoryId": 1, "nom": "Royal Cheese", "prix": 5.80, "description": "Steak, fromage, ketchup", "image": "images/sandwiches/ROYALCHEESE.png" },
+      { "id": 111, "categoryId": 1, "nom": "Royal Deluxe", "prix": 6.50, "description": "Royal avec crudités fraîches", "image": "images/sandwiches/ROYALDELUXE.png" },
+      { "id": 112, "categoryId": 1, "nom": "Signature BBQ Beef", "prix": 7.20, "description": "Bœuf braisé, sauce BBQ", "image": "images/sandwiches/SIGNATURE_BBQ_BEEF_(2_VIANDES).png" },
+      { "id": 113, "categoryId": 1, "nom": "Signature BBQ Burger", "prix": 6.80, "description": "Burger sauce BBQ maison", "image": "images/sandwiches/SIGNATURE_BEEF_BBQ_BURGER_(1_VIANDE).png" }
+    ],
     "sandwiches": [
     { "id": 201, "categoryId": 2, "nom": "280", "prix": 4.50, "description": "Burger double steak", "image": "images/sandwiches/280.png" },
     { "id": 202, "categoryId": 2, "nom": "Big Mac", "prix": 5.50, "description": "Double steak, sauce spéciale", "image": "images/sandwiches/BIGMAC.png" },
