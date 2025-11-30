@@ -115,3 +115,18 @@ document.querySelectorAll('.modalButton.step3').forEach(button => {
     closeModal();
   });
 }); 
+
+document.querySelectorAll(".modalMenuItem").forEach(button => {
+  button.addEventListener('click', () => {
+    const idOfMenuChoose = button.id
+    console.log(idOfMenuChoose)
+    createMenus()
+  })
+})
+let dataJson = null;
+
+async function createMenus() {
+  const r = await fetch('./bd.json');
+  dataJson = await r.json();
+  console.log(dataJson.menus.accompagnement[1]);
+}
