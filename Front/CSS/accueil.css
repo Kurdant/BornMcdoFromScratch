@@ -61,3 +61,8 @@ body, html {
     font-weight: bold;
     margin: 0;
 }
+
+.chooseEatSelected{
+    border: #ffdd3e solid 4px;
+    border-radius: 10px;
+}

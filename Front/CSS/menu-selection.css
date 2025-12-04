@@ -13,12 +13,14 @@ body, html {
 }
 
 .selectFoodMenu {
-    width: 70%;
+    width: calc(100% - 30%); /* ou width: 70%; */
+    max-width: calc(100vw - 30vw); /* Empêche de dépasser */
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    box-sizing: border-box; /* Important ! */
 }
 
 .selectFood {
@@ -116,6 +118,7 @@ body, html {
     cursor: pointer;
     user-select: none;
 }
+
 
 #categorieList {
     display: flex;
@@ -227,7 +230,6 @@ body, html {
 }
 
 
-
 /* panier */
 
 .panier {
@@ -236,7 +238,8 @@ body, html {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 9px #0002;
-    position: relative;
+    position: fixed;
+    right: 0;
 }
 
 .panierLogo {
@@ -379,7 +382,7 @@ body, html {
 #modalContent {
   background: rgba(255, 255, 255); 
   width: 70vw;
-  height: 50vh;
+  height: 70vh;
   padding: 20px;
   border-radius: 10px;
 }
@@ -401,7 +404,7 @@ body, html {
 .modalMenus {
   display: flex;
   justify-content: center;
-  gap: 70px;
+  gap: 10px;
   margin-bottom: 38px;
   margin-top: 12px;
 }
@@ -409,6 +412,11 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px 30px 20px 30px;
+}
+.modalMenuItemSelected{
+  border: #ffdd3e solid 4px;
+  border-radius: 10px;
 }
 .modalMenuImg {
   width: 160px;
@@ -452,4 +460,39 @@ body, html {
 }
 .third-step {
   display: none;
+}
+
+
+#boissonsMenu {
+  display: flex;
+  overflow: hidden; /* masque le débordement */
+  width: calc(4 * 150px + 3 * 10px); /* 4 éléments complets + marges */
+}
+
+.boissonsFroidMenu {
+  flex: 0 0 150px; /* largeur fixe pour chaque élément */
+  margin-right: 10px;
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+/* flèches */
+.boissonsArrow {
+  width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 38px;
+    color: #c8051e;
+    cursor: pointer;
+    user-select: none;
+}
+
+.boissonMenu{
+display:flex; 
+align-items:center;
+justify-content: center;
 }
