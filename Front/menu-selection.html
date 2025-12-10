@@ -31,6 +31,7 @@
 
                     <div id="modal">
                         <div id="modalContent">
+                            <button id="backModal" class="modalBackBtn">Retour</button>
                             <button id="closeModal" class="modalCloseBtn">&times;</button>
                             <div class="first-step">
                                 <div class="modalDescription">
@@ -50,7 +51,6 @@
                                             <div class="modalMenuLabel">Menu Best Of</div>
                                         </div>
                                     </div>
-                                    <button class="modalButton step1">Etape Suivante</button>
                                 </div>
                             </div>
                             <div class="second-step">
@@ -71,7 +71,6 @@
                                             <div class="modalMenuLabel">Potatoes</div>
                                         </div>
                                     </div>
-                                    <button class="modalButton step2">Etape Suivante</button>
                                 </div>
                             </div>
                             <div class="third-step">
@@ -85,7 +84,6 @@
                                         <div id="boissonsMenu" class="modalMenus boissonsMenu"></div>
                                         <div class="boissonsArrow boissonsArrowRight">&#9654;</div>
                                     </div>
-                                    <button class="modalButton step3">Ajouter le menu à ma commande</button>
                                 </div>
                             </div>
                             <div class="modalBoisson">
@@ -99,9 +97,9 @@
                                         <div id="boissonsMenu" class="modalMenus boissonsMenu"></div>
                                         <div class="boissonsArrow boissonsArrowRight">&#9654;</div>
                                     </div>
-                                    <button class="modalButton step3">Ajouter le menu à ma commande</button>
                                 </div>
                             </div>
+                                <button id="nextStep" class="modalButton">Étape suivante</button>
                         </div>
                     </div>
                 </div>
@@ -118,16 +116,7 @@
                     <div class="panierNumbersNumber">72</div>
                 </div>
                 <div class="panierOrder">
-                    <div class="panierOrderItem">
-                        <div class="panierOrderTitle">1 menu Maxi Best Of Big Mac</div>
-                        <span class="panierTrash">&#128465;</span>
-                        <ul>
-                            <li>frite</li>
-                            <li>sprite</li>
-                            <li>ketchup</li>
-                            <li>sauce deluxe</li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
             <div class="panierPay">
@@ -136,7 +125,7 @@
                         <div>[TOTAL]</div>
                         <div>(ttc)</div>
                     </div>
-                    <div style="font-size:28px; font-weight:600;">36,50€</div>
+                    <div style="font-size:28px; font-weight:600;" id="prixFinal">0€</div>
                 </div>
                 <div class="panierEndingAbandonPay">
                     <div class="panierEndingAbandon">[Abandon]</div>

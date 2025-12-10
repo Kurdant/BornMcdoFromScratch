@@ -463,12 +463,6 @@ body, html {
 }
 
 
-#boissonsMenu {
-  display: flex;
-  overflow: hidden; /* masque le débordement */
-  width: calc(4 * 150px + 3 * 10px); /* 4 éléments complets + marges */
-}
-
 .boissonsFroidMenu {
   flex: 0 0 150px; /* largeur fixe pour chaque élément */
   margin-right: 10px;
