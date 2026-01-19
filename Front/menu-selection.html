@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -8,8 +8,7 @@
     <script src="JS/menu-selection.js" defer></script>
     <title>Selection Menu</title>
 </head>
-
-<body>
+  
     <div class="main">
         <div class="selectFoodMenu">
             <div class="selectFood">
@@ -82,7 +81,7 @@
                                     <div class="boissonMenu" style="display:flex; align-items:center;">
                                         <div class="boissonsArrow boissonsArrowLeft">&#9664;</div>
                                         <div id="boissonsMenu" class="modalMenus boissonsMenu"></div>
-                                        <div class="boissonsArrow boissonsArrowRight">&#9654;</div>
+                                        <div class="boissonsArrow boissonsArrowRight categorieArrow categorieArrowRight">&#9654;</div>
                                     </div>
                                 </div>
                             </div>
@@ -94,12 +93,47 @@
                                     </div>
                                     <div class="boissonMenu" style="display:flex; align-items:center;">
                                         <div class="boissonsArrow boissonsArrowLeft">&#9664;</div>
-                                        <div id="boissonsMenu" class="modalMenus boissonsMenu"></div>
+                                        <div id="boissonsMenuSimple" class="modalMenus boissonsMenu"></div>
                                         <div class="boissonsArrow boissonsArrowRight">&#9654;</div>
                                     </div>
                                 </div>
                             </div>
-                                <button id="nextStep" class="modalButton">Étape suivante</button>
+                            <div class="modalTailleBoisson">
+                                <div class="modalDescription">
+                                    <h2>Une petite soif</h2>
+                                    <div class="modalSubtitle">
+                                        Choisissez la taille de votre boisson, +0.50€ pour le format 50 Cl
+                                    </div>
+                                    <div class="taillesBoisson">
+                                        <div class="tailleItem" data-boissonid="1">
+                                            <img id="boissonTailleSmall" src="" alt="">
+                                            <span>30 cl</span>
+                                        </div>
+                                        <div class="tailleItem" data-boissonid="2">
+                                            <img id="boissonTailleLarge" src="" alt="">
+                                            <span>50 cl</span>
+                                        </div>
+                                    </div>
+                                    <div class="Incrémentation">
+                                        <div class="Incrémenteur">
+                                            <div id="IncrémentationMinus" class="IncrémentationBoutton">
+                                                -
+                                            </div>
+                                            <div id="IncrémentationNumber">
+                                                1
+                                            </div>
+                                            <div id="IncrémentationPlus" class="IncrémentationBoutton">
+                                                +
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="boissonsButtons">
+                                    <button id="closeBoissonModal">Annuler</button>
+                                    <button id="sendBoisson" class="modalButton">Ajouter à ma commande</button>
+                                </div>
+                            </div>
+                            <button id="nextStep" class="modalButton">Étape suivante</button>
                         </div>
                     </div>
                 </div>
@@ -110,26 +144,26 @@
             <div class="panierContent">
                 <div class="panierNumbers">
                     <div>
-                        <div>[Commande numéro]</div>
-                        <div>[Sur place :] <b>326</b></div>
+                        <div>Commande numéro</div>
+                        <div>Sur place : <b>326</b></div>
                     </div>
                     <div class="panierNumbersNumber">72</div>
                 </div>
                 <div class="panierOrder">
-                    
+
                 </div>
             </div>
             <div class="panierPay">
                 <div class="panierEnding">
                     <div>
-                        <div>[TOTAL]</div>
+                        <div>TOTAL</div>
                         <div>(ttc)</div>
                     </div>
                     <div style="font-size:28px; font-weight:600;" id="prixFinal">0€</div>
                 </div>
                 <div class="panierEndingAbandonPay">
-                    <div class="panierEndingAbandon">[Abandon]</div>
-                    <div class="panierEndingPay">[Payer]</div>
+                    <div class="panierEndingAbandon">Abandon</div>
+                    <div class="panierEndingPay">Payer</div>
                 </div>
             </div>
         </div>
