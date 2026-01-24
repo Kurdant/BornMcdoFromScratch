@@ -338,8 +338,6 @@ function addBoissonMenu() {
         .catch(error => console.error(error));
 }
 
-
-
 /* ============================================================
 BACK BUTTON DISPLAY (SHOW ONLY IF SELECTION EXISTS)
 ============================================================ */
