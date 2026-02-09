@@ -1,0 +1,16 @@
+{
+    "name": "hugo/wcdo",
+    "description": "Borne de commande WCDO - Backend en PHP natif",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10"
+    },
+    "autoload": {
+        "psr-4": {
+            "WCDO\\": "src/"
+        }
+    }
+}
