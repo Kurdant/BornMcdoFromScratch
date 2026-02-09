@@ -3,7 +3,7 @@
         'name' => 'hugo/wcdo',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '739099b581ced9f00e2f85fff906698da9c7cd25',
+        'reference' => '89b78a5bcfe25d16a1db6428fd1ea6638d07c91b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'hugo/wcdo' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '739099b581ced9f00e2f85fff906698da9c7cd25',
+            'reference' => '89b78a5bcfe25d16a1db6428fd1ea6638d07c91b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

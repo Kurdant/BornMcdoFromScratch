@@ -1,7 +1,5 @@
 {
-    "name": "hugo/wcdo",
-    "description": "Borne de commande WCDO - Backend en PHP natif",
-    "type": "project",
+    "name": "wcdo/backend",
     "require": {
         "php": ">=7.4"
     },
@@ -11,6 +9,11 @@
     "autoload": {
         "psr-4": {
             "WCDO\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     }
 }
