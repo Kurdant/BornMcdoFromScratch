@@ -1,0 +1,119 @@
+erDiagram
+
+    %% ─────────────────────────────────────
+    %% CATALOGUE
+    %% ─────────────────────────────────────
+
+    CATEGORIE {
+        int     id          PK
+        string  nom
+    }
+
+    PRODUIT {
+        int     id              PK
+        int     id_categorie    FK
+        string  nom
+        string  description
+        decimal prix
+        string  image
+        boolean disponible
+        boolean a_taille        "Peut être en grande taille"
+        int     stock
+    }
+
+    MENU {
+        int     id          PK
+        string  nom
+        string  image
+        decimal prix_base
+        string  gabarit     "standard | maxi (pilote tailles par défaut)"
+        boolean disponible
+    }
+
+    COMPOSITION_MENU {
+        int     id          PK
+        int     id_menu     FK
+        int     id_produit  FK
+        string  type_slot   "burger | boisson | accompagnement | sauce"
+        boolean est_defaut  "true = produit pré-sélectionné pour ce slot"
+        int     ordre       "Ordre d'affichage sur la borne"
+    }
+
+    %% ─────────────────────────────────────
+    %% UTILISATEURS
+    %% ─────────────────────────────────────
+
+    CLIENT {
+        int      id                 PK
+        string   pseudo
+        string   email
+        string   password_hash
+        datetime created_at
+        datetime updated_at
+    }
+
+    UTILISATEUR {
+        int      id              PK
+        string   nom
+        string   prenom
+        string   email
+        string   password_hash
+        string   role            "admin | preparation | accueil"
+        boolean  actif
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% ─────────────────────────────────────
+    %% COMMANDES
+    %% ─────────────────────────────────────
+
+    COMMANDE {
+        int      id                 PK
+        int      id_client          FK  "nullable si commande anonyme"
+        int      id_utilisateur     FK  "nullable si commande borne"
+        string   numero_commande        "Numéro affiché au client (UNIQUE)"
+        string   statut             "attente | preparation | livree"
+        string   type               "sur_place | a_emporter"
+        decimal  prix_total
+        datetime date_commande
+    }
+
+    LIGNE_COMMANDE {
+        int     id              PK
+        int     id_commande     FK
+        string  type_ligne      "produit | menu"
+        int     id_produit      FK  "null si type_ligne = menu"
+        int     id_menu         FK  "null si type_ligne = produit"
+        int     quantite
+        decimal prix_unitaire
+        string  taille          "normal | grand (nullable)"
+    }
+
+    DETAIL_COMMANDE_MENU {
+        int     id                  PK
+        int     id_ligne_commande   FK
+        int     id_produit          FK  "Produit choisi pour ce slot"
+        int     id_categorie        FK  "Slot correspondant"
+        string  taille              "normal | grand (nullable)"
+        decimal prix_supplement     "0.00 ou 0.50 si grande taille"
+    }
+
+    %% ─────────────────────────────────────
+    %% RELATIONS
+    %% ─────────────────────────────────────
+
+    CATEGORIE           ||--o{  PRODUIT             : "categorise"
+    PRODUIT             ||--o{  COMPOSITION_MENU    : "compose"
+    MENU                ||--|{  COMPOSITION_MENU    : "est composé de"
+
+    CLIENT              ||--o{  COMMANDE            : "passe"
+    UTILISATEUR         |o--o{  COMMANDE            : "saisit"
+
+    COMMANDE            ||--|{  LIGNE_COMMANDE      : "contient"
+    PRODUIT             |o--o{  LIGNE_COMMANDE      : "référencé dans"
+    MENU                |o--o{  LIGNE_COMMANDE      : "référencé dans"
+
+    LIGNE_COMMANDE      ||--o{  DETAIL_COMMANDE_MENU : "détaille menu"
+    PRODUIT             ||--o{  DETAIL_COMMANDE_MENU : "produit choisi"
+    CATEGORIE           ||--o{  DETAIL_COMMANDE_MENU : "slot"
