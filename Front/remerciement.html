@@ -16,5 +16,19 @@
         </div>
         <button class="thankyou-btn">Nouvelle commande</button>
     </div>
+    <script>
+        // Affiche le numéro de commande si disponible
+        const numero = sessionStorage.getItem('numero_commande');
+        if (numero) {
+            const p = document.createElement('p');
+            p.style.cssText = 'font-size:1.3rem; font-weight:600; color:#FFC72C; margin:12px 0;';
+            p.textContent = `Commande n° ${numero}`;
+            document.querySelector('.thankyou-card').appendChild(p);
+        }
+        document.querySelector('.thankyou-btn').addEventListener('click', () => {
+            sessionStorage.clear();
+            window.location.href = 'accueil.html';
+        });
+    </script>
 </body>
 </html>

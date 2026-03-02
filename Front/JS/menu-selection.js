@@ -2,6 +2,8 @@
 MODAL OPEN/CLOSE
 ============================================================ */
 
+const API_BASE = '/api';
+
 const modal = document.getElementById('modal');
 const modalClose = document.getElementById('closeModal');
 let prixMenu = 0;
@@ -10,6 +12,7 @@ let prixFinal = [0];
 let currentBoisson = null;
 let currentMenuIndexPrix = null; 
 let isMaxiSelected = false;
+let currentMenuProduitId = null;
 
 let tailleItem = 0;
 let is50clSelected = false;
@@ -43,18 +46,19 @@ function closeModal() {
 modalClose.addEventListener('click', closeModal);
 
 /* ============================================================
-LOAD JSON + INITIAL CREATION OF CATEGORIES AND FOOD ITEMS
+LOAD API + INITIAL CREATION OF CATEGORIES AND FOOD ITEMS
 ============================================================ */
 
-fetch('./bd.json')
-  .then(response => response.json())
-  .then(data => {
-    window.jsonData = data;
-    createCategories();
-    createFoodItems();
-    displayFoodByCategory(1);
-  })
-  .catch(error => console.error('Erreur JSON :', error));
+Promise.all([
+  fetch(`${API_BASE}/categories`, { credentials: 'include' }).then(r => r.json()),
+  fetch(`${API_BASE}/produits`,   { credentials: 'include' }).then(r => r.json())
+]).then(([catRes, prodRes]) => {
+  window.apiCategories = catRes.data;
+  window.apiProduits   = prodRes.data;
+  createCategories();
+  createFoodItems();
+  if (apiCategories.length > 0) displayFoodByCategory(apiCategories[0].id);
+}).catch(error => console.error('Erreur API :', error));
 
 /* ============================================================
 CATEGORY CREATION + CATEGORY SELECTION
@@ -63,7 +67,7 @@ CATEGORY CREATION + CATEGORY SELECTION
 const categorieList = document.getElementById('categorieList');
 
 function createCategories() {
-  jsonData.categories.forEach((categorie, idx) => {
+  apiCategories.forEach((categorie, idx) => {
     const div = document.createElement('div');
     div.classList.add('categorieItem');
     if (idx === 0) div.classList.add('categorieItemSelected');
@@ -121,89 +125,69 @@ FOOD ITEMS CREATION
 
 function createFoodItems() {
   const foodContainer = document.getElementById('foodList');
-  const categories = [
-    'menu',
-    'sandwiches',
-    'wraps',
-    'frites',
-    'boissonsFroides',
-    'encas',
-    'desserts'
-  ];
 
-  categories.forEach(categoryKey => {
-    jsonData[categoryKey].forEach(produit => {
-      const div = document.createElement('div');
-      div.classList.add('foodItem');
-      div.dataset.category = produit.categoryId;
+  apiProduits.forEach(produit => {
+    const imgSrc = produit.image || 'images/images/logo.png';
+    const div = document.createElement('div');
+    div.classList.add('foodItem');
+    div.dataset.category = produit.id_categorie;
+    div.id = `food-${produit.id}`;
 
-      div.id = `food-${produit.id}`;
+    div.innerHTML = `
+      <img src="${imgSrc}" alt="${produit.nom}" />
+      <h3>${produit.nom}</h3>
+      <p>${produit.description || ''}</p>
+      <span>${parseFloat(produit.prix).toFixed(2)}€</span>
+    `;
 
-      div.innerHTML = `
-        <img src="./${produit.image}" alt="${produit.nom}" />
-        <h3>${produit.nom}</h3>
-        <p>${produit.description}</p>
-        <span>${produit.prix}€</span>
-      `;
+    div.addEventListener('click', () => {
+      const nom  = produit.nom;
+      const prix = parseFloat(produit.prix);
 
-      div.addEventListener('click', () => {
-        const nom = produit.nom;
-        const prix = produit.prix; // nombre
+      // CAS MENU
+      if (produit.id_categorie === 1) {
+        prixMenu = prix;
+        console.log('Prix du menu sélectionné :', prixMenu);
+        openForMenu();
+        openModal();
+        menuComposition = [nom];
+        currentMenuProduitId = produit.id;
+        return;
+      }
 
-        // CAS MENU
-        if (produit.categoryId === 1) {
-          prixMenu = parseFloat(div.querySelector('span').textContent.replace('€', ''));
-          console.log('Prix du menu sélectionné :', prixMenu);
-          openForMenu();
-          openModal();
-          menuComposition = [nom];
-          return;
+      // CAS BOISSON SEULE
+      if (produit.id_categorie === 5) {
+        openForTailleBoisson();
+        openModal();
+        document.getElementById('nextStep').style.display = "none";
+
+        const imgSmall = document.getElementById('boissonTailleSmall');
+        const imgLarge = document.getElementById('boissonTailleLarge');
+        if (imgSmall && imgLarge) {
+          imgSmall.src = imgSrc;
+          imgSmall.alt = produit.nom + ' 30cl';
+          imgLarge.src = imgSrc;
+          imgLarge.alt = produit.nom + ' 50cl';
         }
-
-        // CAS BOISSON SEULE
-        if (produit.categoryId === 5) {
-          openForTailleBoisson();
-          openModal();
-          document.getElementById('nextStep').style.display = "none";
-
-          const imgSmall = document.getElementById('boissonTailleSmall');
-          const imgLarge = document.getElementById('boissonTailleLarge');
-
-          if (imgSmall && imgLarge) {
-            imgSmall.src = `./${produit.image}`;
-            imgSmall.alt = produit.nom + ' 30cl';
-
-            imgLarge.src = `./${produit.image}`;
-            imgLarge.alt = produit.nom + ' 50cl';
-          }
-          // On mémorise la boisson cliquée
-          currentBoisson = produit;
-
-          document.querySelectorAll('.tailleItem').forEach(item => {
-            item.addEventListener('click', () => {
-              const idBoisson = item.dataset.boissonid;
-              if (idBoisson === '2') {
-                is50clSelected = true;
-                console.log("50cl sélectionné :", is50clSelected);
-              } else {
-                is50clSelected = false;
-              }
-              const old = document.querySelector('.modalMenuItemSelected');
-              if (old) old.classList.remove('modalMenuItemSelected');
-              item.classList.add('modalMenuItemSelected');
-            });
+        currentBoisson = produit;
+        document.querySelectorAll('.tailleItem').forEach(item => {
+          item.addEventListener('click', () => {
+            is50clSelected = item.dataset.boissonid === '2';
+            const old = document.querySelector('.modalMenuItemSelected');
+            if (old) old.classList.remove('modalMenuItemSelected');
+            item.classList.add('modalMenuItemSelected');
           });
-          return;
-        }
-
-
-        // CAS PRODUIT SIMPLE
-        AjoutProduitSimple(nom, prix);
-        console.log('rajoute du prix PRODUIT SIMPLE dans le tableau ', prixFinal);
         });
+        return;
+      }
 
-      foodContainer.appendChild(div);
-    });
+      // CAS PRODUIT SIMPLE
+      ajouterPanierAPI(produit.id, 1, null, (ligneId) => {
+        AjoutProduitSimple(nom, prix, ligneId);
+      });
+      });
+
+    foodContainer.appendChild(div);
   });
 }
 
@@ -211,20 +195,22 @@ const envoie = document.getElementById('sendBoisson');
 envoie.addEventListener('click', () => {
   if (!currentBoisson) return;
 
-  let prixUnite = currentBoisson.prix;
-  if (is50clSelected) {
-    prixUnite += 0.50;  // 0.50 PAR unité
-  }
-  
-  let prixFinalBoisson = prixUnite * incrementationNombre;  // ✅ Multiplie APRÈS
-  console.log(`Prix unité: ${prixUnite}, Quantité: ${incrementationNombre}, Total: ${prixFinalBoisson}`);
-  AjoutProduitSimple(currentBoisson.nom, prixFinalBoisson);
-  currentBoisson = null;
-  is50clSelected = false;  // Reset
-  incrementationNombre = 1; // Reset
-  chiffre.textContent = incrementationNombre; // Update display
-  document.getElementById('nextStep').style.display = "block";
-  closeModal();
+  let prixUnite = parseFloat(currentBoisson.prix);
+  if (is50clSelected) prixUnite += 0.50;
+
+  const qte = incrementationNombre;
+  const prixFinalBoisson = prixUnite * qte;
+  const details = { taille: is50clSelected ? '50cl' : '30cl' };
+
+  ajouterPanierAPI(currentBoisson.id, qte, details, (ligneId) => {
+    AjoutProduitSimple(currentBoisson.nom, prixFinalBoisson, ligneId);
+    currentBoisson = null;
+    is50clSelected = false;
+    incrementationNombre = 1;
+    chiffre.textContent = incrementationNombre;
+    document.getElementById('nextStep').style.display = "block";
+    closeModal();
+  });
 });
 
 /* ============================================================
@@ -294,10 +280,10 @@ function resetCarousel() {
 }
 
 function addBoissonMenu() {
-    fetch('./bd.json')
-        .then(response => response.json())
-        .then(data => {
-            const boissonsFroides = data.boissonsFroides;
+    fetch(`${API_BASE}/boissons`, { credentials: 'include' })
+        .then(r => r.json())
+        .then(res => {
+            const boissonsFroides = res.data;
             const container = document.getElementById('boissonsMenu');
 
             container.innerHTML = '';
@@ -307,7 +293,7 @@ function addBoissonMenu() {
                 div.classList.add('boissonsFroidMenu', 'modalMenuItem');
                 div.id = `${produit.id}`;
                 div.innerHTML = `
-                    <img src="./${produit.image}" alt="${produit.nom}" />
+                    <img src="${produit.image || 'images/images/logo.png'}" alt="${produit.nom}" />
                     <h3 class='modalMenuLabel'>${produit.nom}</h3>
                 `;
                 container.appendChild(div);
@@ -319,14 +305,6 @@ function addBoissonMenu() {
                     console.log('Boisson sélectionnée id:', idMenu);
                 });
             });
-
-            console.log('DEBUG - Container:', {
-                clientWidth: boissonsContainer.clientWidth,
-                scrollWidth: boissonsContainer.scrollWidth,
-                itemCount: boissonsContainer.children.length,
-                computedItemWidth: boissonsContainer.children[0]?.offsetWidth || 0
-            });
-
 
             // ✅ RESET APRÈS AJOUT DES ITEMS
             requestAnimationFrame(() => {
@@ -358,13 +336,17 @@ function panierTrash(event) {
   if (!item) return;
 
   const indexPrix = item.dataset.indexPrix;
+  const ligneId   = item.dataset.ligneId;
 
-  if (indexPrix !== undefined) {
-    prixFinal[indexPrix] = 0;
-  }
+  if (indexPrix !== undefined) prixFinal[indexPrix] = 0;
 
   item.remove();
   prixFinalCalc();
+
+  if (ligneId) {
+    fetch(`${API_BASE}/panier/ligne/${ligneId}`, { method: 'DELETE', credentials: 'include' })
+      .catch(err => console.error('Erreur suppression panier API:', err));
+  }
 }
 
 document.addEventListener('click', e => {
@@ -394,7 +376,11 @@ function AjoutAuPanier() {
   }
   prixFinal.push(prixMenu);
   prixFinalCalc();
-  console.log('rajoute du prix MENU dans le tableau ', prixFinal);
+
+  // Sync avec le panier API
+  if (currentMenuProduitId) {
+    ajouterPanierAPI(currentMenuProduitId, 1, { composition: menuComposition }, () => {});
+  }
 
   const item = document.createElement('div');
   item.classList.add('panierOrderItem');
@@ -428,7 +414,7 @@ function AjoutAuPanier() {
 AJOUT PRODUIT SIMPLE
 ============================================================ */
 
-function AjoutProduitSimple(nom, prix) {
+function AjoutProduitSimple(nom, prix, ligneId) {
   const panier = document.querySelector('.panierOrder');
 
   const indexPrix = prixFinal.length;
@@ -439,6 +425,7 @@ function AjoutProduitSimple(nom, prix) {
   item.classList.add('panierOrderItem');
 
   item.dataset.indexPrix = indexPrix;
+  if (ligneId) item.dataset.ligneId = ligneId;
 
   const title = document.createElement('div');
   title.classList.add('panierOrderTitle');
@@ -542,6 +529,65 @@ async function createMenus() {
   const r = await fetch('./bd.json');
   dataJson = await r.json();
 }
+
+/* ============================================================
+PANIER API - HELPER
+============================================================ */
+
+function ajouterPanierAPI(produitId, quantite, details, callback) {
+  fetch(`${API_BASE}/panier/ajouter`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ produit_id: produitId, quantite, details: details || null })
+  })
+  .then(r => r.json())
+  .then(res => {
+    const lignes = res.lignes || [];
+    const matches = lignes.filter(l => l.id_produit === produitId);
+    const ligneId = matches.length > 0 ? matches[matches.length - 1].id : null;
+    if (callback) callback(ligneId);
+  })
+  .catch(err => {
+    console.error('Erreur panier API:', err);
+    if (callback) callback(null);
+  });
+}
+
+/* ============================================================
+ABANDON + PAYER
+============================================================ */
+
+document.querySelector('.panierEndingAbandon').addEventListener('click', () => {
+  fetch(`${API_BASE}/panier`, { method: 'DELETE', credentials: 'include' })
+    .finally(() => { window.location.href = 'accueil.html'; });
+});
+
+document.querySelector('.panierEndingPay').addEventListener('click', () => {
+  const typeCommande   = sessionStorage.getItem('type_commande') || 'sur_place';
+  const numeroChevalet = parseInt(sessionStorage.getItem('numero_chevalet') || '1', 10);
+
+  fetch(`${API_BASE}/commande`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type_commande:   typeCommande,
+      numero_chevalet: numeroChevalet,
+      mode_paiement:   'carte'
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.numero_commande) {
+      sessionStorage.setItem('numero_commande', res.numero_commande);
+      window.location.href = 'remerciement.html';
+    } else {
+      alert(res.error || 'Erreur lors de la commande');
+    }
+  })
+  .catch(err => alert('Erreur réseau : ' + err));
+});
 
 /* ============================================================
 CHANGE CATEGORIES WITH ARROWS

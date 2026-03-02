@@ -197,53 +197,53 @@ INSERT IGNORE INTO `CLIENT` (`prenom`, `nom`, `email`, `mot_de_passe`, `points_f
 
 -- ── Produits ─────────────────────────────────────────────────
 -- Sandwiches (id_categorie = 2)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('Big Mac',            '2 steaks, sauce Big Mac, salade, cornichons, oignons, cheddar', 5.40, 100, 2),
-    ('McChicken',          'Escalope de poulet pané, mayonnaise, salade',                   4.20, 80,  2),
-    ('Royal Cheese',       'Steak bœuf, sauce burger, cheddar fondu, oignons caramélisés', 4.90, 80,  2),
-    ('Double Cheeseburger','2 steaks bœuf, double cheddar, cornichons, moutarde, ketchup',  3.80, 60,  2),
-    ('Filet-O-Fish',       'Filet de poisson pané, sauce tartare, cheddar',                 4.50, 50,  2),
-    ('Quarter Pounder',    'Steak 113g, cheddar, oignons, cornichons, moutarde, ketchup',   5.90, 70,  2);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('Big Mac',            '2 steaks, sauce Big Mac, salade, cornichons, oignons, cheddar', 5.40, 100, 2, '/Front/images/sandwiches/BIGMAC.png'),
+    ('McChicken',          'Escalope de poulet pané, mayonnaise, salade',                   4.20, 80,  2, '/Front/images/sandwiches/MCCHICKEN.png'),
+    ('Royal Cheese',       'Steak bœuf, sauce burger, cheddar fondu, oignons caramélisés', 4.90, 80,  2, '/Front/images/sandwiches/ROYALCHEESE.png'),
+    ('Double Cheeseburger','2 steaks bœuf, double cheddar, cornichons, moutarde, ketchup',  3.80, 60,  2, '/Front/images/encas/cheeseburger.png'),
+    ('Filet-O-Fish',       'Filet de poisson pané, sauce tartare, cheddar',                 4.50, 50,  2, '/Front/images/sandwiches/MCFISH.png'),
+    ('Quarter Pounder',    'Steak 113g, cheddar, oignons, cornichons, moutarde, ketchup',   5.90, 70,  2, '/Front/images/sandwiches/ROYALBACON.png');
 
 -- Wraps (id_categorie = 3)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('Wrap Crispy Chicken', 'Poulet croustillant, salade, tomates, sauce Caesar',    4.70, 60, 3),
-    ('Wrap McChicken',      'Escalope de poulet, mayonnaise, salade, tortilla',      4.20, 50, 3);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('Wrap Crispy Chicken', 'Poulet croustillant, salade, tomates, sauce Caesar',    4.70, 60, 3, '/Front/images/wraps/MCWRAP-POULET-BACON.png'),
+    ('Wrap McChicken',      'Escalope de poulet, mayonnaise, salade, tortilla',      4.20, 50, 3, '/Front/images/wraps/mcwrap-chevre.png');
 
 -- Frites (id_categorie = 4)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('Petites Frites', 'Frites croustillantes — portion petite',  1.90, 200, 4),
-    ('Moyennes Frites','Frites croustillantes — portion moyenne', 2.40, 200, 4),
-    ('Grandes Frites', 'Frites croustillantes — portion grande',  3.10, 200, 4);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('Petites Frites', 'Frites croustillantes — portion petite',  1.90, 200, 4, '/Front/images/frites/PETITE_FRITE.png'),
+    ('Moyennes Frites','Frites croustillantes — portion moyenne', 2.40, 200, 4, '/Front/images/frites/MOYENNE_FRITE.png'),
+    ('Grandes Frites', 'Frites croustillantes — portion grande',  3.10, 200, 4, '/Front/images/frites/GRANDE_FRITE.png');
 
 -- Boissons Froides (id_categorie = 5)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('Coca-Cola',     'Soda rafraîchissant',        2.20, 300, 5),
-    ('Sprite',        'Limonade pétillante citronnée', 2.20, 200, 5),
-    ('Fanta Orange',  'Soda à l\'orange',            2.20, 200, 5),
-    ('Eau Minérale',  'Eau plate 50cl',              1.50, 150, 5),
-    ('Milkshake Vanille', 'Milkshake crémeux à la vanille', 3.50, 80, 5);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('Coca-Cola',        'Soda rafraîchissant',              2.20, 300, 5, '/Front/images/boissons/coca-cola.png'),
+    ('Sprite',           'Limonade pétillante citronnée',    2.20, 200, 5, '/Front/images/boissons/the-vert-citron-sans-sucres.png'),
+    ('Fanta Orange',     'Soda à l\'orange',                 2.20, 200, 5, '/Front/images/boissons/fanta.png'),
+    ('Eau Minérale',     'Eau plate 50cl',                   1.50, 150, 5, '/Front/images/boissons/eau.png'),
+    ('Milkshake Vanille','Milkshake crémeux à la vanille',   3.50, 80,  5, '/Front/images/boissons/jus-pomme-bio.png');
 
 -- Encas (id_categorie = 6)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('McNuggets x6',  '6 nuggets de poulet croustillants',  4.20, 150, 6),
-    ('McNuggets x9',  '9 nuggets de poulet croustillants',  5.80, 100, 6),
-    ('McNuggets x20', '20 nuggets de poulet croustillants', 9.90, 50,  6),
-    ('McBaguette',    'Baguette, jambon, emmental, salade', 3.90, 80,  6);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('McNuggets x6',  '6 nuggets de poulet croustillants',  4.20, 150, 6, '/Front/images/encas/nuggets_4.png'),
+    ('McNuggets x9',  '9 nuggets de poulet croustillants',  5.80, 100, 6, '/Front/images/encas/nuggets_4.png'),
+    ('McNuggets x20', '20 nuggets de poulet croustillants', 9.90, 50,  6, '/Front/images/encas/nuggets_20.png'),
+    ('McBaguette',    'Baguette, jambon, emmental, salade', 3.90, 80,  6, '/Front/images/encas/croc-mc-do.png');
 
 -- Desserts (id_categorie = 7)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('McFlurry Oreo',    'Glace vanille avec éclats de cookies Oreo',  3.20, 60, 7),
-    ('McFlurry Caramel', 'Glace vanille avec coulis de caramel',        3.20, 60, 7),
-    ('Apple Pie',        'Chausson aux pommes chaud et croustillant',   1.80, 80, 7),
-    ('Sundae Caramel',   'Coupe glacée vanille nappée de caramel',      2.50, 70, 7);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('McFlurry Oreo',    'Glace vanille avec éclats de cookies Oreo',  3.20, 60, 7, '/Front/images/desserts/MCFleury.png'),
+    ('McFlurry Caramel', 'Glace vanille avec coulis de caramel',        3.20, 60, 7, '/Front/images/desserts/MCFleury.png'),
+    ('Apple Pie',        'Chausson aux pommes chaud et croustillant',   1.80, 80, 7, '/Front/images/desserts/cookie.png'),
+    ('Sundae Caramel',   'Coupe glacée vanille nappée de caramel',      2.50, 70, 7, '/Front/images/desserts/sunday.png');
 
 -- Menus (id_categorie = 1)
-INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`) VALUES
-    ('Menu Big Mac',     'Big Mac + Moyennes Frites + Boisson au choix',    9.20, 100, 1),
-    ('Menu McChicken',   'McChicken + Moyennes Frites + Boisson au choix',  8.50, 100, 1),
-    ('Menu Royal Cheese','Royal Cheese + Moyennes Frites + Boisson au choix', 8.90, 80, 1),
-    ('Menu McNuggets 9', '9 McNuggets + Moyennes Frites + Boisson au choix', 9.50, 80, 1);
+INSERT IGNORE INTO `PRODUIT` (`nom`, `description`, `prix`, `stock`, `id_categorie`, `image`) VALUES
+    ('Menu Big Mac',     'Big Mac + Moyennes Frites + Boisson au choix',      9.20, 100, 1, '/Front/images/sandwiches/BIGMAC.png'),
+    ('Menu McChicken',   'McChicken + Moyennes Frites + Boisson au choix',    8.50, 100, 1, '/Front/images/sandwiches/MCCHICKEN.png'),
+    ('Menu Royal Cheese','Royal Cheese + Moyennes Frites + Boisson au choix', 8.90, 80,  1, '/Front/images/sandwiches/ROYALCHEESE.png'),
+    ('Menu McNuggets 9', '9 McNuggets + Moyennes Frites + Boisson au choix',  9.50, 80,  1, '/Front/images/encas/nuggets_4.png');
 
 -- ============================================================
 -- FIN DU SCRIPT
