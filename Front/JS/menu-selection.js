@@ -2,7 +2,14 @@
 MODAL OPEN/CLOSE
 ============================================================ */
 
-const API_BASE = '/api';
+const API_BASE = 'https://wakdo-back.acadenice.fr/api';
+
+// Convertit les chemins d'images renvoyés par l'API (/Front/images/...)
+// en chemins valides pour le front servi depuis wakdo-front.acadenice.fr
+function imgUrl(path) {
+    if (!path) return 'images/logo.png';
+    return path.replace(/^\/Front/, '');
+}
 
 const modal = document.getElementById('modal');
 const modalClose = document.getElementById('closeModal');
@@ -127,7 +134,7 @@ function createFoodItems() {
   const foodContainer = document.getElementById('foodList');
 
   apiProduits.forEach(produit => {
-    const imgSrc = produit.image || 'images/images/logo.png';
+    const imgSrc = imgUrl(produit.image);
     const div = document.createElement('div');
     div.classList.add('foodItem');
     div.dataset.category = produit.id_categorie;
@@ -293,7 +300,7 @@ function addBoissonMenu() {
                 div.classList.add('boissonsFroidMenu', 'modalMenuItem');
                 div.id = `${produit.id}`;
                 div.innerHTML = `
-                    <img src="${produit.image || 'images/images/logo.png'}" alt="${produit.nom}" />
+                    <img src="${imgUrl(produit.image)}" alt="${produit.nom}" />
                     <h3 class='modalMenuLabel'>${produit.nom}</h3>
                 `;
                 container.appendChild(div);
