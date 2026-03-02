@@ -9,10 +9,10 @@ class Database
     public static function getConnection(): \PDO
     {
         if (self::$instance === null) {
-            $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'db';
-            $name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'wcdo';
-            $user = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'wcdo_user';
-            $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'wcdo_pass';
+            $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: throw new \RuntimeException('DB_HOST not set');
+            $name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: throw new \RuntimeException('DB_NAME not set');
+            $user = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: throw new \RuntimeException('DB_USER not set');
+            $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: throw new \RuntimeException('DB_PASS not set');
 
             $dsn = "mysql:host={$host};dbname={$name};charset=utf8mb4";
 

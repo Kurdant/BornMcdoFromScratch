@@ -5,11 +5,12 @@ services:
     image: mariadb:10.11
     container_name: wcdo-db
     restart: unless-stopped
+    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wcdo
-      MYSQL_USER: wcdo_user
-      MYSQL_PASSWORD: wcdo_pass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -31,11 +32,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      DB_HOST: db
-      DB_NAME: wcdo
-      DB_USER: wcdo_user
-      DB_PASS: wcdo_pass
+    env_file: .env
 
   # ── Nginx (reverse proxy + serveur front) ────────────────
   nginx:
@@ -57,10 +54,11 @@ services:
     restart: unless-stopped
     ports:
       - "8080:80"
+    env_file: .env
     environment:
       PMA_HOST: db
-      PMA_USER: wcdo_user
-      PMA_PASSWORD: wcdo_pass
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       db:
         condition: service_healthy

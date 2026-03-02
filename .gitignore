@@ -1,0 +1,16 @@
+# Secrets
+.env
+
+# Dépendances
+vendor/
+node_modules/
+
+# Données Docker persistantes
+docker/mariadb/data/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
