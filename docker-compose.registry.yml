@@ -1,0 +1,68 @@
+# docker-compose.registry.yml
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"    # HTTP
+      - "443:443"  # HTTPS
+      - "8080:8080" # Dashboard (optionnel)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./traefik/acme.json:/acme.json
+      - ./traefik/htpasswd:/etc/traefik/htpasswd:ro
+    networks:
+      - registry-net
+
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: unless-stopped
+    environment:
+      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry
+    volumes:
+      - ./data/registry:/var/lib/registry
+      - ./auth/htpasswd:/auth/htpasswd:ro
+      - ./registry/config.yml:/etc/docker/registry/config.yml:ro
+    networks:
+      - registry-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.rule=Host(`hugo-registry.a3n.fr`)"
+      - "traefik.http.routers.registry.entrypoints=websecure"
+      - "traefik.http.routers.registry.tls=true"
+      - "traefik.http.routers.registry.tls.certresolver=le"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
+      - "traefik.http.routers.registry.middlewares=registry-ratelimit@docker,registry-allowlist@docker"
+      - "traefik.http.middlewares.registry-ratelimit.ratelimit.average=20"
+      - "traefik.http.middlewares.registry-ratelimit.ratelimit.burst=50"
+      - "traefik.http.middlewares.registry-allowlist.ipwhitelist.sourcerange=192.168.0.0/16,10.0.0.0/8"
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-ui
+    restart: unless-stopped
+    environment:
+      - REGISTRY_TITLE=Registry-Privé
+      - REGISTRY_URL=http://hugo-registry.a3n.fr
+      - DELETE_IMAGES=true
+    networks:
+      - registry-net
+    depends_on:
+      - registry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry-ui.rule=Host(`hugo-registry-ui.a3n.fr`)"
+      - "traefik.http.routers.registry-ui.entrypoints=websecure"
+      - "traefik.http.routers.registry-ui.tls=true"
+      - "traefik.http.routers.registry-ui.tls.certresolver=le"
+      - "traefik.http.services.registry-ui.loadbalancer.server.port=80"
+
+networks:
+  registry-net:
+    driver: bridge
