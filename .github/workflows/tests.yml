@@ -25,7 +25,10 @@ jobs:
         coverage: xdebug
     
     - name: Validate composer.json
-      run: composer validate
+      run: composer validate --strict
+    
+    - name: Update composer.lock if needed
+      run: composer update --lock --no-interaction
     
     - name: Cache Composer packages
       id: composer-cache
