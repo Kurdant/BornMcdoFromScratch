@@ -33,6 +33,7 @@ $commande  = new CommandeController();
 $auth      = new AuthController();
 $admin     = new AdminController();
 
+
 // ── Groupe 1 : Catalogue ──────────────────────────────────────
 $router->get('/api/categories',        [$catalogue, 'getCategories']);
 $router->get('/api/produits',          [$catalogue, 'getProduits']);
