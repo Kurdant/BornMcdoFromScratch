@@ -50,6 +50,7 @@ jobs:
           host: stark.a3n.fr
           username: hugo
           key: ${{ secrets.STARK_SSH_KEY }}
+          passphrase: ${{ secrets.STARK_SSH_PASSPHRASE }}
           envs: REGISTRY_USER,REGISTRY_PASSWORD
           script: |
             set -e
