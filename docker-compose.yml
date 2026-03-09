@@ -25,6 +25,7 @@ services:
   # ── Backend PHP ──────────────────────────────────────────
   php:
     build: .
+    image: hugo-registry.a3n.fr/wcdo:dev
     container_name: wcdo-php
     restart: unless-stopped
     volumes:

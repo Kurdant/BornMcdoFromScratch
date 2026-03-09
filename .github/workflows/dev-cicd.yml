@@ -53,7 +53,7 @@ jobs:
           envs: REGISTRY_USER,REGISTRY_PASSWORD
           script: |
             set -e
-            cd /home/hugo/projects
+            cd /home/hugo/projects/BornMcdoFromScratch2
 
             git pull origin dev
 

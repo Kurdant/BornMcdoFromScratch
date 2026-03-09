@@ -5,8 +5,33 @@ on:
     branches: [prod]
 
 jobs:
+  tag-prod-image:
+    name: Tag :dev as :prod on stark registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Retag image via SSH on stark
+        uses: appleboy/ssh-action@v1
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        with:
+          host: stark.a3n.fr
+          username: hugo
+          key: ${{ secrets.STARK_SSH_KEY }}
+          envs: REGISTRY_USER,REGISTRY_PASSWORD
+          script: |
+            set -e
+            echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
+              -u "$REGISTRY_USER" --password-stdin
+
+            docker pull hugo-registry.a3n.fr/wcdo:dev
+            docker tag hugo-registry.a3n.fr/wcdo:dev hugo-registry.a3n.fr/wcdo:prod
+            docker push hugo-registry.a3n.fr/wcdo:prod
+
   deploy-vision:
-    name: Deploy on vision.a3n.fr
+    name: Deploy :prod on vision.a3n.fr
+    needs: tag-prod-image
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +51,6 @@ jobs:
 
             echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
               -u "$REGISTRY_USER" --password-stdin
-
-            docker pull hugo-registry.a3n.fr/wcdo:dev
-            docker tag hugo-registry.a3n.fr/wcdo:dev hugo-registry.a3n.fr/wcdo:prod
-            docker push hugo-registry.a3n.fr/wcdo:prod
 
             docker compose pull
             docker compose up -d
