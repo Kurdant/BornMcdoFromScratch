@@ -5,43 +5,12 @@ on:
     branches: [dev]
 
 jobs:
-  test:
-    name: PHPUnit PHP 8.2
+  test-build-deploy:
+    name: Test, Build & Deploy on stark.a3n.fr
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: json, pdo, pdo_mysql
-          coverage: xdebug
-
-      - name: Validate composer.json
-        run: composer validate --no-check-lock --no-check-publish
-
-      - name: Cache Composer packages
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-8.2-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-8.2-
-
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: Run PHPUnit tests
-        run: ./vendor/bin/phpunit tests/
-
-  build-and-deploy:
-    name: Build image & Deploy on stark.a3n.fr
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Build, push and deploy via SSH on stark
+      - name: Test, build, push and deploy via SSH on stark
         uses: appleboy/ssh-action@v1
         env:
           REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
@@ -57,6 +26,10 @@ jobs:
             cd /home/hugo/projects/BornMcdoFromScratch2
 
             git pull origin dev
+
+            composer install --prefer-dist --no-progress
+
+            ./vendor/bin/phpunit tests/
 
             echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
               -u "$REGISTRY_USER" --password-stdin
