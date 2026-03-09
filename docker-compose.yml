@@ -82,8 +82,27 @@ services:
     networks:
       - internal
 
+  # ── GitHub Actions Runner ────────────────────────────────
+  runner:
+    image: myoung34/github-runner:latest
+    container_name: wcdo-runner
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REPO_URL=https://github.com/Kurdant/BornMcdoFromScratch
+      - RUNNER_NAME=stark
+      - RUNNER_WORKDIR=/tmp/runner/work
+      - RUNNER_GROUP=Default
+      - RUNNER_LABELS=self-hosted,stark
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - runner_work:/tmp/runner
+    networks:
+      - internal
+
 volumes:
   db_data:
+  runner_work:
 
 networks:
   internal:
