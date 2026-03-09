@@ -16,6 +16,10 @@ class ComposerStaticInitb442d1a8112a8d479e2ab3d2af56ae1d
         array (
             'WCDO\\' => 5,
         ),
+        'T' =>
+        array (
+            'Tests\\' => 6,
+        ),
         'P' =>
         array (
             'PhpParser\\' => 10,
@@ -30,6 +34,10 @@ class ComposerStaticInitb442d1a8112a8d479e2ab3d2af56ae1d
         'WCDO\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Tests\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'PhpParser\\' =>
         array (

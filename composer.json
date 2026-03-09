@@ -1,5 +1,7 @@
 {
     "name": "wcdo/backend",
+    "description": "Backend API for WCDO - McDonald's order terminal",
+    "license": "proprietary",
     "require": {
         "php": ">=7.4"
     },

@@ -1,24 +1,15 @@
 <?php return array(
     'root' => array(
-        'name' => 'hugo/wcdo',
+        'name' => 'wcdo/backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '89b78a5bcfe25d16a1db6428fd1ea6638d07c91b',
-        'type' => 'project',
+        'reference' => '993636c8910c21f002a1f1a288cfd99b14bc9972',
+        'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'hugo/wcdo' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '89b78a5bcfe25d16a1db6428fd1ea6638d07c91b',
-            'type' => 'project',
-            'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'myclabs/deep-copy' => array(
             'pretty_version' => '1.13.4',
             'version' => '1.13.4.0',
@@ -252,6 +243,15 @@
             'install_path' => __DIR__ . '/../theseer/tokenizer',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'wcdo/backend' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '993636c8910c21f002a1f1a288cfd99b14bc9972',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
     ),
 );

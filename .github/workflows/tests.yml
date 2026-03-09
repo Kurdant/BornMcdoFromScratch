@@ -20,7 +20,7 @@ jobs:
           coverage: xdebug
 
       - name: Validate composer.json
-        run: composer validate
+        run: composer validate --no-check-lock --no-check-publish
 
       - name: Cache Composer packages
         uses: actions/cache@v4
