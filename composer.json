@@ -1,5 +1,8 @@
 {
     "name": "wcdo/backend",
+    "description": "WCDO Backend - Borne de commande pour McDonald's",
+    "version": "1.0.0",
+    "license": "proprietary",
     "require": {
         "php": ">=7.4"
     },
