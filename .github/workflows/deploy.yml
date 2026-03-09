@@ -10,7 +10,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    
+    &
     - name: Deploy to VPS via Docker
       env:
         VPS_HOST: ${{ secrets.VPS_HOST }}
