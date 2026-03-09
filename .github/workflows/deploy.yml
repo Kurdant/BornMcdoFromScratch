@@ -1,30 +1,78 @@
-name: Deploy to VPS
+name: CI/CD - Deploy to prod (vision)
 
 on:
   push:
-    branches: [ main ]
+    branches: [prod]
 
 jobs:
-  deploy:
+  deploy-vision:
+    name: Deploy on vision.a3n.fr
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Deploy to VPS via Docker
-      env:
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-        VPS_USER: ${{ secrets.VPS_USER }}
-        VPS_KEY: ${{ secrets.VPS_SSH_KEY }}
-      run: |
-        echo "🚀 Deploying to VPS..."
-        echo "Vous devez ajouter les secrets GitHub:"
-        echo "- VPS_HOST: IP ou domaine du VPS"
-        echo "- VPS_USER: utilisateur SSH"
-        echo "- VPS_SSH_KEY: clé privée SSH"
-        
-    - name: Build Docker image
-      run: docker build -t wcdo-backend:latest .
-      
-    - name: Push to Docker registry (optionnel)
-      run: echo "Configuration Docker registry si nécessaire"
+      - name: Deploy via SSH on vision
+        uses: appleboy/ssh-action@v1
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        with:
+          host: vision.a3n.fr
+          username: hugo
+          key: ${{ secrets.VISION_SSH_KEY }}
+          envs: REGISTRY_USER,REGISTRY_PASSWORD
+          script: |
+            set -e
+            cd /home/hugo/wcdo
+
+            echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
+              -u "$REGISTRY_USER" --password-stdin
+
+            docker pull hugo-registry.a3n.fr/wcdo:dev
+            docker tag hugo-registry.a3n.fr/wcdo:dev hugo-registry.a3n.fr/wcdo:prod
+            docker push hugo-registry.a3n.fr/wcdo:prod
+
+            docker compose pull
+            docker compose up -d
+
+            sleep 15
+            docker compose ps --filter status=running
+
+  health-check:
+    name: Health Check
+    needs: deploy-vision
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for container to be ready
+        run: sleep 10
+
+      - name: Check app is responding
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" \
+            --max-time 30 \
+            https://wakdo-back.acadenice.fr/api/health || echo "000")
+          echo "HTTP status: $STATUS"
+          if [ "$STATUS" != "200" ] && [ "$STATUS" != "302" ]; then
+            echo "Health check failed with status $STATUS"
+            exit 1
+          fi
+          echo "App is up and running"
+
+  merge-to-main:
+    name: Merge prod into main
+    needs: health-check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Merge prod into main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          git merge origin/prod --ff-only
+          git push origin main

@@ -1,0 +1,71 @@
+name: CI/CD - Dev (stark.a3n.fr)
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  test:
+    name: PHPUnit PHP 8.2
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: json, pdo, pdo_mysql
+          coverage: xdebug
+
+      - name: Validate composer.json
+        run: composer validate
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-8.2-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-8.2-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit tests/ -v
+
+  build-and-deploy:
+    name: Build image & Deploy on stark.a3n.fr
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build, push and deploy via SSH on stark
+        uses: appleboy/ssh-action@v1
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        with:
+          host: stark.a3n.fr
+          username: hugo
+          key: ${{ secrets.STARK_SSH_KEY }}
+          envs: REGISTRY_USER,REGISTRY_PASSWORD
+          script: |
+            set -e
+            cd /home/hugo/projects
+
+            git pull origin dev
+
+            echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
+              -u "$REGISTRY_USER" --password-stdin
+
+            docker build -t hugo-registry.a3n.fr/wcdo:dev .
+            docker push hugo-registry.a3n.fr/wcdo:dev
+
+            docker compose pull
+            docker compose up -d
+
+            sleep 10
+            docker compose ps --filter status=running
+            echo "Deploy on stark done"
