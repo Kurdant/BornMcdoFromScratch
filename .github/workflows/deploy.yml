@@ -6,28 +6,20 @@ on:
 
 jobs:
   tag-prod-image:
-    name: Tag :dev as :prod on stark registry
-    runs-on: ubuntu-latest
+    name: Tag :dev as :prod on registry
+    runs-on: self-hosted
 
     steps:
-      - name: Retag image via SSH on stark
-        uses: appleboy/ssh-action@v1
-        env:
-          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-        with:
-          host: stark.a3n.fr
-          username: hugo
-          key: ${{ secrets.STARK_SSH_KEY }}
-          envs: REGISTRY_USER,REGISTRY_PASSWORD
-          script: |
-            set -e
-            echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
-              -u "$REGISTRY_USER" --password-stdin
+      - name: Login to registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login hugo-registry.a3n.fr \
+            -u "${{ secrets.REGISTRY_USER }}" --password-stdin
 
-            docker pull hugo-registry.a3n.fr/wcdo:dev
-            docker tag hugo-registry.a3n.fr/wcdo:dev hugo-registry.a3n.fr/wcdo:prod
-            docker push hugo-registry.a3n.fr/wcdo:prod
+      - name: Retag dev image as prod
+        run: |
+          docker pull hugo-registry.a3n.fr/wcdo:dev
+          docker tag hugo-registry.a3n.fr/wcdo:dev hugo-registry.a3n.fr/wcdo:prod
+          docker push hugo-registry.a3n.fr/wcdo:prod
 
   deploy-vision:
     name: Deploy :prod on vision.a3n.fr
@@ -44,6 +36,7 @@ jobs:
           host: vision.a3n.fr
           username: hugo
           key: ${{ secrets.VISION_SSH_KEY }}
+          passphrase: ${{ secrets.VISION_SSH_PASSPHRASE }}
           envs: REGISTRY_USER,REGISTRY_PASSWORD
           script: |
             set -e

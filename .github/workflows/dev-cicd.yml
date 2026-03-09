@@ -6,40 +6,36 @@ on:
 
 jobs:
   test-build-deploy:
-    name: Test, Build & Deploy on stark.a3n.fr
-    runs-on: ubuntu-latest
+    name: Test, Build & Deploy on stark
+    runs-on: self-hosted
 
     steps:
-      - name: Test, build, push and deploy via SSH on stark
-        uses: appleboy/ssh-action@v1
-        env:
-          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-        with:
-          host: stark.a3n.fr
-          username: hugo
-          key: ${{ secrets.STARK_SSH_KEY }}
-          passphrase: ${{ secrets.STARK_SSH_PASSPHRASE }}
-          envs: REGISTRY_USER,REGISTRY_PASSWORD
-          script: |
-            set -e
-            cd /home/hugo/projects/BornMcdoFromScratch2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            git pull origin dev
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
 
-            composer install --prefer-dist --no-progress
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit tests/
 
-            ./vendor/bin/phpunit tests/
+      - name: Login to registry
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login hugo-registry.a3n.fr \
+            -u "${{ secrets.REGISTRY_USER }}" --password-stdin
 
-            echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
-              -u "$REGISTRY_USER" --password-stdin
+      - name: Build and push Docker image
+        run: |
+          docker build -t hugo-registry.a3n.fr/wcdo:dev .
+          docker push hugo-registry.a3n.fr/wcdo:dev
 
-            docker build -t hugo-registry.a3n.fr/wcdo:dev .
-            docker push hugo-registry.a3n.fr/wcdo:dev
+      - name: Deploy with docker compose
+        run: |
+          docker compose pull
+          docker compose up -d
 
-            docker compose pull
-            docker compose up -d
-
-            sleep 10
-            docker compose ps --filter status=running
-            echo "Deploy on stark done"
+      - name: Verify containers are running
+        run: |
+          sleep 10
+          docker compose ps --filter status=running
+          echo "Deploy on stark done"
