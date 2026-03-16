@@ -24,12 +24,12 @@ class Commande
         ?Client $client = null
     ) {
         if (!$payementValide) {
-            throw new \Exception("Impossible de créer une commande sans paiement validé");
+            throw new \Exception('Impossible de créer une commande sans paiement validé');
         }
 
         $chevalet = (int) $numeroChevalet;
         if ($chevalet < 1 || $chevalet > 999) {
-            throw new \InvalidArgumentException("Le numéro de chevalet doit être entre 001 et 999");
+            throw new \InvalidArgumentException('Le numéro de chevalet doit être entre 001 et 999');
         }
 
         if (!in_array($typeCommande, self::TYPES_VALIDES, true)) {
@@ -53,12 +53,36 @@ class Commande
         return 'CMD-' . strtoupper(uniqid()) . '-' . date('Ymd');
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function setId(int $id): void { $this->id = $id; }
-    public function getNumeroCommande(): string { return $this->numeroCommande; }
-    public function getNumeroChevalet(): string { return $this->numeroChevalet; }
-    public function getTypeCommande(): string { return $this->typeCommande; }
-    public function getModePaiement(): string { return $this->modePaiement; }
-    public function getMontantTotal(): float { return $this->montantTotal; }
-    public function getClient(): ?Client { return $this->client; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    public function getNumeroCommande(): string
+    {
+        return $this->numeroCommande;
+    }
+    public function getNumeroChevalet(): string
+    {
+        return $this->numeroChevalet;
+    }
+    public function getTypeCommande(): string
+    {
+        return $this->typeCommande;
+    }
+    public function getModePaiement(): string
+    {
+        return $this->modePaiement;
+    }
+    public function getMontantTotal(): float
+    {
+        return $this->montantTotal;
+    }
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
 }

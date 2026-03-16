@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WCDO\Services;
 
-use WCDO\Repositories\CommandeRepository;
-use WCDO\Repositories\CommandeProduitRepository;
-use WCDO\Repositories\PanierRepository;
-use WCDO\Repositories\PanierProduitRepository;
-use WCDO\Repositories\ProduitRepository;
 use WCDO\Repositories\ClientRepository;
+use WCDO\Repositories\CommandeProduitRepository;
+use WCDO\Repositories\CommandeRepository;
+use WCDO\Repositories\PanierProduitRepository;
+use WCDO\Repositories\PanierRepository;
+use WCDO\Repositories\ProduitRepository;
 
 class CommandeService
 {
@@ -49,17 +49,17 @@ class CommandeService
 
         $panier = $this->panierRepo->findBySessionId($sessionId);
         if (!$panier) {
-            throw new \RuntimeException("Aucun panier trouvé pour cette session");
+            throw new \RuntimeException('Aucun panier trouvé pour cette session');
         }
 
         $lignes = $this->ppRepo->findByPanierId((int) $panier['id']);
         if (empty($lignes)) {
-            throw new \RuntimeException("Le panier est vide");
+            throw new \RuntimeException('Le panier est vide');
         }
 
         // Calcul du total
         $total = array_sum(array_map(
-            fn(array $l) => $l['prix_unitaire'] * $l['quantite'],
+            fn (array $l) => $l['prix_unitaire'] * $l['quantite'],
             $lignes
         ));
 
@@ -69,15 +69,15 @@ class CommandeService
         // Validation numéro chevalet
         $chevalet = (int) $data['numero_chevalet'];
         if ($chevalet < 1 || $chevalet > 999) {
-            throw new \InvalidArgumentException("Le numéro de chevalet doit être entre 001 et 999");
+            throw new \InvalidArgumentException('Le numéro de chevalet doit être entre 001 et 999');
         }
 
         // Validation type et mode
         if (!in_array($data['type_commande'], ['sur_place', 'a_emporter'], true)) {
-            throw new \InvalidArgumentException("Type de commande invalide");
+            throw new \InvalidArgumentException('Type de commande invalide');
         }
         if (!in_array($data['mode_paiement'], ['carte', 'especes'], true)) {
-            throw new \InvalidArgumentException("Mode de paiement invalide");
+            throw new \InvalidArgumentException('Mode de paiement invalide');
         }
 
         // Décrémenter le stock de chaque produit

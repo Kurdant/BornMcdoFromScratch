@@ -16,6 +16,6 @@ class SauceRepository
     public function findAll(): array
     {
         $stmt = $this->pdo->query('SELECT id, nom FROM SAUCE ORDER BY nom');
-        return array_map(fn($r) => ['id' => (int) $r['id'], 'nom' => $r['nom']], $stmt->fetchAll());
+        return array_map(fn ($r) => ['id' => (int) $r['id'], 'nom' => $r['nom']], $stmt->fetchAll());
     }
 }

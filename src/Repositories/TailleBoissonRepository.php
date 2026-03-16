@@ -16,7 +16,7 @@ class TailleBoissonRepository
     public function findAll(): array
     {
         $stmt = $this->pdo->query('SELECT id, nom, volume, supplement_prix FROM TAILLE_BOISSON ORDER BY volume');
-        return array_map(fn($r) => [
+        return array_map(fn ($r) => [
             'id'             => (int)   $r['id'],
             'nom'            => $r['nom'],
             'volume'         => (int)   $r['volume'],
@@ -29,7 +29,9 @@ class TailleBoissonRepository
         $stmt = $this->pdo->prepare('SELECT id, nom, volume, supplement_prix FROM TAILLE_BOISSON WHERE id = ?');
         $stmt->execute([$id]);
         $row = $stmt->fetch();
-        if (!$row) return null;
+        if (!$row) {
+            return null;
+        }
         return [
             'id'             => (int)   $row['id'],
             'nom'            => $row['nom'],

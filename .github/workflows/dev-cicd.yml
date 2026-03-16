@@ -5,6 +5,39 @@ on:
     branches: [dev]
 
 jobs:
+  quality:
+    name: Quality Gates (lint + style + analyse)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: json, pdo, pdo_mysql
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-8.2-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-8.2-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Lint PHP (syntaxe)
+        run: find src/ tests/ -name "*.php" -exec php -l {} \;
+
+      - name: PHP-CS-Fixer (style PSR-12)
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.php
+
+      - name: PHPStan (analyse statique niveau 3)
+        run: ./vendor/bin/phpstan analyse --memory-limit=256M
+
   test:
     name: PHPUnit Tests
     runs-on: ubuntu-latest
@@ -40,8 +73,10 @@ jobs:
 
   build-and-deploy:
     name: Build & Deploy on stark
-    needs: test
-    if: always() # TODO: retirer ce 'if: always()' une fois les tests corrigés
+    needs: [quality, test]
+    if: always() && needs.quality.result == 'success'
+    # TODO: remplacer if par "needs: [quality, test]" sans condition
+    # une fois les tests PHPUnit corrigés
     runs-on: self-hosted
 
     steps:

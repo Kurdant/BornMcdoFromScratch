@@ -8,7 +8,8 @@ class PanierLigne
         public readonly Produit $produit,
         public readonly float $prixUnitaire,
         public int $quantite
-    ) {}
+    ) {
+    }
 
     public function getSousTotal(): float
     {
