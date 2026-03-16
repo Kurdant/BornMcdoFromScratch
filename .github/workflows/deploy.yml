@@ -27,6 +27,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy config files to vision
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: vision.a3n.fr
+          username: hugo
+          key: ${{ secrets.VISION_SSH_KEY }}
+          passphrase: ${{ secrets.VISION_SSH_PASSPHRASE }}
+          source: "docker-compose.prod.yml,docker/nginx/nginx.conf,docker/mariadb/init.sql"
+          target: /home/hugo/wcdo
+          strip_components: 0
+
       - name: Deploy via SSH on vision
         uses: appleboy/ssh-action@v1
         env:
@@ -42,10 +55,21 @@ jobs:
             set -e
             cd /home/hugo/wcdo
 
+            # Renommer le compose prod en compose par défaut
+            cp docker-compose.prod.yml docker-compose.yml
+
             echo "$REGISTRY_PASSWORD" | docker login hugo-registry.a3n.fr \
               -u "$REGISTRY_USER" --password-stdin
 
             docker compose pull
+
+            # Extraire les fichiers statiques (Front/, public/) depuis l'image :prod
+            # vers le volume app_files partagé avec nginx
+            docker run --rm \
+              -v wcdo_app_files:/dest \
+              hugo-registry.a3n.fr/wcdo:prod \
+              sh -c "cp -r /app/. /dest/"
+
             docker compose up -d
 
             sleep 15
