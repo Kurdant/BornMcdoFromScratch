@@ -48,17 +48,21 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=admin_proxy"
       # Frontend
-      - "traefik.http.routers.wcdo-front.rule=Host(`wakdo-front.acadenice.fr`)"
+      - "traefik.http.routers.wcdo-front.rule=Host(`wcdo-front.a3n.fr`)"
       - "traefik.http.routers.wcdo-front.entrypoints=websecure"
       - "traefik.http.routers.wcdo-front.tls.certresolver=letsencrypt"
       - "traefik.http.routers.wcdo-front.service=wcdo-front"
       - "traefik.http.services.wcdo-front.loadbalancer.server.port=80"
-      # Backend API
-      - "traefik.http.routers.wcdo-back.rule=Host(`wakdo-back.acadenice.fr`)"
+      # Backend API (HTTPS)
+      - "traefik.http.routers.wcdo-back.rule=Host(`wcdo-back.a3n.fr`)"
       - "traefik.http.routers.wcdo-back.entrypoints=websecure"
       - "traefik.http.routers.wcdo-back.tls.certresolver=letsencrypt"
       - "traefik.http.routers.wcdo-back.service=wcdo-back"
       - "traefik.http.services.wcdo-back.loadbalancer.server.port=80"
+      # Backend API (HTTP - pour health-check CI/CD)
+      - "traefik.http.routers.wcdo-back-http.rule=Host(`wcdo-back.a3n.fr`)"
+      - "traefik.http.routers.wcdo-back-http.entrypoints=web"
+      - "traefik.http.routers.wcdo-back-http.service=wcdo-back"
     networks:
       - internal
       - admin_proxy
