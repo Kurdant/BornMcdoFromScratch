@@ -68,4 +68,8 @@ $router->delete('/api/admin/produits/{id}',[$admin, 'deleteProduit']);
 $router->get('/api/admin/commandes',      [$admin, 'getCommandes']);
 
 // ── Dispatch ──────────────────────────────────────────────────
+$router->get('/api/health', function () {
+    Response::json(['status' => 'ok']);
+});
+
 $router->dispatch();
