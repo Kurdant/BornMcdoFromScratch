@@ -114,3 +114,9 @@ jobs:
           git checkout main
           git merge origin/prod --no-ff --no-edit -X theirs
           git push origin main
+
+      - name: Sync main back into dev
+        run: |
+          git checkout dev
+          git merge origin/main --no-ff --no-edit -X theirs
+          git push origin dev
