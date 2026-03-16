@@ -98,8 +98,7 @@ jobs:
 
       - name: Deploy with docker compose
         run: |
-          docker compose pull
-          docker compose up -d --no-recreate runner
+          docker compose pull db php nginx phpmyadmin
           docker compose up -d db php nginx phpmyadmin
 
       - name: Verify containers are running
