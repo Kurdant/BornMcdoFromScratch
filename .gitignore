@@ -16,3 +16,5 @@ data/registry/
 # Logs
 *.log
 backups/
+.php-cs-fixer.cache
+.php-cs-fixer.cache
