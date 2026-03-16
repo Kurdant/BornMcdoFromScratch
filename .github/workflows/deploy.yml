@@ -88,7 +88,7 @@ jobs:
         run: |
           STATUS=$(curl -o /dev/null -s -w "%{http_code}" \
             --max-time 30 \
-            http://wcdo-back.vision.a3n.fr/api/health || echo "000")
+            http://wcdo-back.a3n.fr/api/health || echo "000")
           echo "HTTP status: $STATUS"
           if [ "$STATUS" != "200" ] && [ "$STATUS" != "302" ]; then
             echo "Health check failed with status $STATUS"
