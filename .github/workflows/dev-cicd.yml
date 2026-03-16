@@ -93,6 +93,9 @@ jobs:
           docker build -t hugo-registry.a3n.fr/wcdo:dev .
           docker push hugo-registry.a3n.fr/wcdo:dev
 
+      - name: Write .env file
+        run: echo "${{ secrets.DEV_ENV_FILE }}" > .env
+
       - name: Deploy with docker compose
         run: |
           docker compose pull
