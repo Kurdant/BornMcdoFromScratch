@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WCDO\Services;
 
-use WCDO\Repositories\ClientRepository;
-use WCDO\Repositories\AdminRepository;
 use WCDO\Entities\Client;
+use WCDO\Repositories\AdminRepository;
+use WCDO\Repositories\ClientRepository;
 
 class AuthService
 {
@@ -29,11 +29,11 @@ class AuthService
         }
 
         if ($this->clientRepo->emailExiste($data['email'])) {
-            throw new \RuntimeException("Cet email est déjà utilisé");
+            throw new \RuntimeException('Cet email est déjà utilisé');
         }
 
         if (strlen($data['mot_de_passe']) < 6) {
-            throw new \InvalidArgumentException("Le mot de passe doit contenir au moins 6 caractères");
+            throw new \InvalidArgumentException('Le mot de passe doit contenir au moins 6 caractères');
         }
 
         $client = new Client(
@@ -54,7 +54,7 @@ class AuthService
         $client = $this->clientRepo->findByEmail($email);
 
         if (!$client || !$client->verifierMotDePasse($motDePasse)) {
-            throw new \RuntimeException("Email ou mot de passe incorrect");
+            throw new \RuntimeException('Email ou mot de passe incorrect');
         }
 
         return $this->clientToArray($client);
@@ -66,11 +66,11 @@ class AuthService
         $admin = $this->adminRepo->findByEmail($email);
 
         if (!$admin) {
-            throw new \RuntimeException("Email ou mot de passe incorrect");
+            throw new \RuntimeException('Email ou mot de passe incorrect');
         }
 
         if (!password_verify($motDePasse, $admin['mot_de_passe'])) {
-            throw new \RuntimeException("Email ou mot de passe incorrect");
+            throw new \RuntimeException('Email ou mot de passe incorrect');
         }
 
         return [

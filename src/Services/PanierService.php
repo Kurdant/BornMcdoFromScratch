@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WCDO\Services;
 
-use WCDO\Repositories\PanierRepository;
 use WCDO\Repositories\PanierProduitRepository;
+use WCDO\Repositories\PanierRepository;
 use WCDO\Repositories\ProduitRepository;
 
 class PanierService
@@ -46,12 +46,12 @@ class PanierService
     public function ajouter(string $sessionId, int $produitId, int $quantite, ?array $details = null): array
     {
         if ($quantite <= 0) {
-            throw new \InvalidArgumentException("La quantité doit être supérieure à 0");
+            throw new \InvalidArgumentException('La quantité doit être supérieure à 0');
         }
 
         $produit = $this->produitRepo->findById($produitId);
         if (!$produit) {
-            throw new \InvalidArgumentException("Produit introuvable");
+            throw new \InvalidArgumentException('Produit introuvable');
         }
         if (!$produit['disponible']) {
             throw new \RuntimeException("Le produit '{$produit['nom']}' n'est plus disponible");
@@ -89,7 +89,7 @@ class PanierService
     {
         $panier = $this->panierRepo->findBySessionId($sessionId);
         if (!$panier) {
-            throw new \RuntimeException("Panier introuvable");
+            throw new \RuntimeException('Panier introuvable');
         }
 
         $this->ppRepo->removeLigne($ligneId);
@@ -108,7 +108,7 @@ class PanierService
     private function calcTotal(array $lignes): float
     {
         return array_sum(array_map(
-            fn(array $l) => $l['prix_unitaire'] * $l['quantite'],
+            fn (array $l) => $l['prix_unitaire'] * $l['quantite'],
             $lignes
         ));
     }

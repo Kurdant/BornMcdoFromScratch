@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WCDO\Controllers;
 
 use WCDO\Http\Response;
-use WCDO\Services\AuthService;
-use WCDO\Repositories\ProduitRepository;
-use WCDO\Repositories\CommandeRepository;
 use WCDO\Repositories\CommandeProduitRepository;
+use WCDO\Repositories\CommandeRepository;
+use WCDO\Repositories\ProduitRepository;
+use WCDO\Services\AuthService;
 
 class AdminController
 {

@@ -19,7 +19,7 @@ class Client
         string $motDePasse
     ) {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException("Email invalide");
+            throw new \InvalidArgumentException('Email invalide');
         }
         $this->prenom = $prenom;
         $this->nom = $nom;
@@ -28,19 +28,43 @@ class Client
         $this->dateCreation = new \DateTimeImmutable();
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function setId(int $id): void { $this->id = $id; }
-    public function getPrenom(): string { return $this->prenom; }
-    public function getNom(): string { return $this->nom; }
-    public function getEmail(): string { return $this->email; }
-    public function getMotDePasseHash(): string { return $this->motDePasseHash; }
-    public function getPointsFidelite(): int { return $this->pointsFidelite; }
-    public function getDateCreation(): \DateTimeImmutable { return $this->dateCreation; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    public function getPrenom(): string
+    {
+        return $this->prenom;
+    }
+    public function getNom(): string
+    {
+        return $this->nom;
+    }
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+    public function getMotDePasseHash(): string
+    {
+        return $this->motDePasseHash;
+    }
+    public function getPointsFidelite(): int
+    {
+        return $this->pointsFidelite;
+    }
+    public function getDateCreation(): \DateTimeImmutable
+    {
+        return $this->dateCreation;
+    }
 
     public function ajouterPoints(int $points): void
     {
         if ($points < 0) {
-            throw new \InvalidArgumentException("Les points ajoutés ne peuvent pas être négatifs");
+            throw new \InvalidArgumentException('Les points ajoutés ne peuvent pas être négatifs');
         }
         $this->pointsFidelite += $points;
     }
