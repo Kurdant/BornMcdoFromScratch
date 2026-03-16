@@ -106,5 +106,9 @@ volumes:
 
 networks:
   internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.100.0.0/24
   admin_proxy:
     external: true
