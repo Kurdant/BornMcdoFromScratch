@@ -5,21 +5,44 @@ on:
     branches: [dev]
 
 jobs:
-  test-build-deploy:
-    name: Test, Build & Deploy on stark
+  test:
+    name: PHPUnit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: json, pdo, pdo_mysql
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --no-check-lock --no-check-publish
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-8.2-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-8.2-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit tests/
+
+  build-and-deploy:
+    name: Build & Deploy on stark
+    needs: test
     runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install Composer dependencies
-        run: docker run --rm -v ${{ github.workspace }}:/app -w /app composer:latest composer install --prefer-dist --no-progress
-        continue-on-error: true
-
-      - name: Run PHPUnit tests
-        run: docker run --rm -v ${{ github.workspace }}:/app -w /app php:8.2-cli ./vendor/bin/phpunit tests/
-        continue-on-error: true
 
       - name: Login to registry
         run: |
