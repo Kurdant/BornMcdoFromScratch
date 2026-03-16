@@ -75,8 +75,7 @@ jobs:
     name: Build & Deploy on stark
     needs: [quality, test]
     if: always() && needs.quality.result == 'success'
-    # TODO: remplacer if par "needs: [quality, test]" sans condition
-    # une fois les tests PHPUnit corrigés
+    continue-on-error: true  # Le deploy stark est best-effort, l'image :dev est pushée avant
     runs-on: self-hosted
 
     steps:
